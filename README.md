@@ -1,0 +1,1 @@
+a digital financial security interface designed to detect suspicious financial activities and alert users in real time. Today, online frauds such as phishing links, scam calls, and fraudulent transactions are increasing. Many users are not aware of how to identify these threats.
