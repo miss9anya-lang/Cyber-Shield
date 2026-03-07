@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CyberShield — Financial Protection</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #0d1117;
+  --surface: #161b27;
+  --card:    #1c2333;
+  --border:  #2a3347;
+  --blue:    #2563eb;
+  --blue-lt: #3b82f6;
+  --blue-dim:#1e3a5f;
+  --white:   #f0f4ff;
+  --grey:    #8b95a8;
+  --grey-lt: #c8d0df;
+  --red:     #ef4444;
+  --red-dim: #3b1212;
+  --green:   #22c55e;
+  --green-dim:#0f2e1a;
+  --yellow:  #f59e0b;
+  --yellow-dim:#2e2006;
+}
+/* LIGHT THEME */
+body.light {
+  --bg:         #f1f5fb;
+  --surface:    #ffffff;
+  --card:       #ffffff;
+  --border:     #dde3ef;
+  --blue-dim:   #dbeafe;
+  --white:      #111827;
+  --grey:       #6b7280;
+  --grey-lt:    #374151;
+  --red-dim:    #fee2e2;
+  --green-dim:  #dcfce7;
+  --yellow-dim: #fef3c7;
+}
+body.light .topnav       { box-shadow:0 1px 4px rgba(0,0,0,.07); }
+body.light .field input,
+body.light .search-input,
+body.light .textarea     { background:#f8fafc; }
+body.light .rs           { background:#f8fafc; }
+body.light .step-card    { background:#f8fafc; }
+body.light .scam-url-box { background:#f8fafc; color:#6b7280; }
+body.light .portal-link  { background:#dbeafe; }
+body.light .portal-link:hover { background:#bfdbfe; }
+body.light .tab-row      { background:#f1f5fb; }
+body.light .login-wrap   { box-shadow:0 4px 24px rgba(0,0,0,.08); }
+body.light .upload-zone  { border-color:#cbd5e1; }
+
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--white); min-height:100vh; font-size:14px; line-height:1.5; transition:background .3s, color .3s; }
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:4px; }
+
+/* LOGIN */
+#loginPage { position:fixed; inset:0; z-index:100; background:var(--bg); display:flex; align-items:center; justify-content:center; }
+.login-wrap { width:400px; background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:40px 36px; }
+.login-logo { display:flex; align-items:center; gap:10px; margin-bottom:28px; }
+.logo-icon { width:40px; height:40px; background:var(--blue); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; }
+.logo-name { font-size:20px; font-weight:700; }
+.logo-name span { color:var(--blue-lt); }
+.login-heading { font-size:22px; font-weight:700; margin-bottom:6px; }
+.login-sub { font-size:13px; color:var(--grey); margin-bottom:28px; }
+.tab-row { display:flex; gap:4px; background:var(--card); border-radius:8px; padding:3px; margin-bottom:22px; }
+.tab { flex:1; padding:7px 0; background:none; border:none; cursor:pointer; font-family:'Inter',sans-serif; font-size:13px; font-weight:500; color:var(--grey); border-radius:6px; transition:all .18s; }
+.tab.active { background:var(--blue); color:#fff; }
+.field { margin-bottom:16px; }
+.field label { display:block; font-size:12px; font-weight:500; color:var(--grey); margin-bottom:6px; text-transform:uppercase; letter-spacing:.5px; }
+.field input { width:100%; padding:10px 14px; background:var(--card); border:1px solid var(--border); border-radius:8px; color:var(--white); font-family:'Inter',sans-serif; font-size:14px; outline:none; transition:border-color .18s; }
+.field input:focus { border-color:var(--blue); }
+.field input::placeholder { color:var(--grey); }
+.otp-row { display:flex; gap:8px; align-items:center; }
+.otp-row input { flex:1; }
+.otp-btn { padding:10px 14px; background:var(--blue-dim); border:1px solid var(--blue); border-radius:8px; color:var(--blue-lt); font-family:'Inter',sans-serif; font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; transition:background .18s; }
+.otp-btn:hover { background:var(--blue); color:#fff; }
+.toggle-row { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+.tog { width:36px; height:20px; background:var(--green); border-radius:10px; position:relative; cursor:pointer; flex-shrink:0; }
+.tog::after { content:''; position:absolute; top:3px; left:17px; width:14px; height:14px; background:#fff; border-radius:50%; }
+.toggle-row span { font-size:13px; color:var(--grey-lt); }
+.bio-btn { width:100%; padding:11px; background:var(--card); border:1px solid var(--border); border-radius:8px; color:var(--grey-lt); font-family:'Inter',sans-serif; font-size:13px; font-weight:500; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:12px; transition:border-color .18s; }
+.bio-btn:hover { border-color:var(--blue); color:var(--white); }
+.login-btn { width:100%; padding:12px; background:var(--blue); border:none; border-radius:8px; color:#fff; font-family:'Inter',sans-serif; font-size:14px; font-weight:600; cursor:pointer; transition:background .18s; }
+.login-btn:hover { background:var(--blue-lt); }
+
+/* TOPNAV */
+.topnav { position:sticky; top:0; z-index:50; height:56px; background:var(--surface); border-bottom:1px solid var(--border); display:flex; align-items:center; padding:0 24px; gap:4px; }
+.nav-logo { display:flex; align-items:center; gap:8px; margin-right:28px; }
+.nav-logo-icon { width:30px; height:30px; background:var(--blue); border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:15px; }
+.nav-logo-text { font-size:16px; font-weight:700; }
+.nav-logo-text span { color:var(--blue-lt); }
+.nav-links { display:flex; align-items:center; gap:2px; }
+.navbtn { padding:6px 13px; background:none; border:none; cursor:pointer; font-family:'Inter',sans-serif; font-size:13px; font-weight:500; color:var(--grey); border-radius:7px; transition:all .18s; }
+.navbtn:hover { color:var(--white); background:var(--card); }
+.navbtn.active { color:var(--white); background:var(--card); }
+.nav-right { display:flex; align-items:center; gap:14px; margin-left:auto; }
+.protected-badge { display:flex; align-items:center; gap:6px; font-size:12px; font-weight:500; color:var(--green); }
+.dot { width:7px; height:7px; border-radius:50%; background:var(--green); animation:blink 2s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.4} }
+.alert-dot { display:inline-block; background:var(--red); color:#fff; font-size:10px; font-weight:700; padding:1px 5px; border-radius:8px; margin-left:4px; }
+.avatar { width:32px; height:32px; background:var(--blue-dim); border:1px solid var(--blue); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; cursor:pointer; }
+
+/* LAYOUT */
+#mainApp { display:none; }
+.page { display:none; padding:28px 32px; max-width:1100px; margin:0 auto; }
+.page.active { display:block; }
+.page-title { font-size:22px; font-weight:700; margin-bottom:4px; }
+.page-desc { font-size:13px; color:var(--grey); margin-bottom:28px; }
+
+/* CARDS */
+.card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; }
+.card-title { font-size:15px; font-weight:600; margin-bottom:4px; }
+.card-sub { font-size:12px; color:var(--grey); margin-bottom:16px; }
+.grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:20px; }
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px; }
+
+/* STATS */
+.stat { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:18px 20px; }
+.stat-num { font-size:28px; font-weight:700; margin:8px 0 4px; }
+.stat-lbl { font-size:12px; color:var(--grey); font-weight:500; }
+.stat-note { font-size:11px; color:var(--grey); margin-top:4px; }
+.stat-icon { font-size:20px; }
+.c-red{color:var(--red)} .c-green{color:var(--green)} .c-blue{color:var(--blue-lt)} .c-yellow{color:var(--yellow)} .c-grey{color:var(--grey-lt)}
+
+/* RISK METER */
+.risk-wrap { display:flex; flex-direction:column; align-items:center; padding:8px 0; }
+.ring-wrap { position:relative; width:120px; height:120px; margin-bottom:12px; }
+.ring-wrap svg { transform:rotate(-90deg); }
+.ring-bg { fill:none; stroke:var(--border); stroke-width:10; }
+.ring-val { fill:none; stroke-width:10; stroke-linecap:round; transition:stroke-dashoffset 1.2s ease; }
+.ring-label { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.ring-num { font-size:26px; font-weight:700; }
+.ring-txt { font-size:10px; color:var(--grey); margin-top:2px; letter-spacing:.5px; text-transform:uppercase; }
+.risk-status { font-size:14px; font-weight:600; margin-bottom:4px; }
+.risk-hint { font-size:12px; color:var(--grey); text-align:center; }
+
+/* BAR CHART */
+.bars { display:flex; align-items:flex-end; gap:8px; height:90px; margin-top:8px; }
+.bar-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:5px; }
+.bar-fill { width:100%; border-radius:4px 4px 0 0; background:var(--blue-dim); border:1px solid var(--blue); transition:height 1s ease; }
+.bar-day { font-size:10px; color:var(--grey); }
+
+/* TABLE */
+.tbl { width:100%; border-collapse:collapse; }
+.tbl th { text-align:left; padding:10px 14px; font-size:11px; font-weight:600; color:var(--grey); text-transform:uppercase; letter-spacing:.5px; border-bottom:1px solid var(--border); }
+.tbl td { padding:13px 14px; font-size:13px; border-bottom:1px solid var(--border); vertical-align:middle; }
+.tbl tr:last-child td { border-bottom:none; }
+.tbl tr:hover td { background:rgba(255,255,255,.02); }
+.mer { font-weight:600; color:var(--white); }
+.mer-sub { font-size:11px; color:var(--grey); margin-top:2px; }
+
+/* CHIPS */
+.chip { display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:600; padding:3px 9px; border-radius:20px; border:1px solid; }
+.chip-safe   { background:var(--green-dim); color:var(--green);  border-color:#1a5c36; }
+.chip-flag   { background:var(--red-dim);   color:var(--red);    border-color:#6b1f1f; }
+.chip-review { background:var(--yellow-dim);color:var(--yellow); border-color:#5c3e0a; }
+
+/* BUTTONS */
+.btn { padding:7px 14px; border-radius:7px; font-family:'Inter',sans-serif; font-size:12px; font-weight:600; cursor:pointer; border:1px solid; transition:all .18s; }
+.btn-approve { background:var(--green-dim); color:var(--green); border-color:#1a5c36; }
+.btn-approve:hover { background:#164d2e; }
+.btn-block   { background:var(--red-dim);   color:var(--red);   border-color:#6b1f1f; }
+.btn-block:hover   { background:#501a1a; }
+.btn-report  { background:var(--yellow-dim);color:var(--yellow);border-color:#5c3e0a; }
+.btn-report:hover  { background:#3d2c0a; }
+.btn-verify  { background:var(--blue-dim);  color:var(--blue-lt); border-color:var(--blue); }
+.btn-verify:hover  { background:#1a3460; }
+.btn-primary { background:var(--blue); color:#fff; border-color:var(--blue); }
+.btn-primary:hover { background:var(--blue-lt); border-color:var(--blue-lt); }
+.btn-row { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+
+/* ALERT CARDS */
+.alert-list { display:flex; flex-direction:column; gap:12px; }
+.alert-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px 18px; display:flex; gap:14px; align-items:flex-start; transition:border-color .18s; }
+.alert-card:hover { border-color:#3a4560; }
+.alert-card.high { border-left:3px solid var(--red); }
+.alert-card.med  { border-left:3px solid var(--yellow); }
+.alert-ico { width:38px; height:38px; border-radius:9px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:17px; }
+.ico-red    { background:var(--red-dim); }
+.ico-yellow { background:var(--yellow-dim); }
+.alert-body { flex:1; }
+.alert-title { font-size:14px; font-weight:600; color:var(--white); margin-bottom:4px; }
+.alert-desc  { font-size:13px; color:var(--grey-lt); line-height:1.55; }
+.alert-footer { display:flex; align-items:center; gap:10px; margin-top:8px; flex-wrap:wrap; }
+.alert-time  { font-size:11px; color:var(--grey); }
+.risk-tag { font-size:10px; font-weight:700; padding:2px 8px; border-radius:20px; border:1px solid; text-transform:uppercase; letter-spacing:.5px; }
+.tag-high   { background:var(--red-dim);    color:var(--red);    border-color:#6b1f1f; }
+.tag-med    { background:var(--yellow-dim); color:var(--yellow); border-color:#5c3e0a; }
+.tag-low    { background:var(--green-dim);  color:var(--green);  border-color:#1a5c36; }
+
+/* SEARCH */
+.search-box { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:22px; margin-bottom:16px; }
+.search-row { display:flex; gap:10px; margin-top:12px; }
+.search-input { flex:1; padding:10px 14px; background:var(--surface); border:1px solid var(--border); border-radius:8px; color:var(--white); font-family:'Inter',sans-serif; font-size:14px; outline:none; transition:border-color .18s; }
+.search-input:focus { border-color:var(--blue); }
+.search-input::placeholder { color:var(--grey); }
+
+/* RESULT */
+.result-box { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:22px; animation:fadeUp .3s ease; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+.result-head { display:flex; align-items:center; gap:14px; margin-bottom:20px; }
+.result-ico { width:48px; height:48px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:22px; }
+.result-label { font-size:18px; font-weight:700; }
+.result-sub { font-size:12px; color:var(--grey); margin-top:3px; }
+.result-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:18px; }
+.rs { background:var(--surface); border:1px solid var(--border); border-radius:9px; padding:14px; text-align:center; }
+.rs-n { font-size:20px; font-weight:700; }
+.rs-l { font-size:11px; color:var(--grey); margin-top:3px; text-transform:uppercase; letter-spacing:.5px; }
+.tag-row { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px; }
+.tag { font-size:11px; font-weight:600; padding:4px 11px; border-radius:20px; border:1px solid; }
+.tag-danger { background:var(--red-dim);    color:var(--red);    border-color:#6b1f1f; }
+.tag-warn   { background:var(--yellow-dim); color:var(--yellow); border-color:#5c3e0a; }
+.tag-info   { background:var(--blue-dim);   color:var(--blue-lt);border-color:var(--blue); }
+.warning-box { background:var(--red-dim); border:1px solid #6b1f1f; border-radius:9px; padding:14px; margin-bottom:16px; }
+.warning-box .wt { font-size:13px; font-weight:600; color:var(--red); margin-bottom:5px; }
+.warning-box p  { font-size:12px; color:var(--grey-lt); line-height:1.55; }
+.check-list { display:flex; flex-direction:column; gap:0; margin-bottom:16px; }
+.check-row { display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border); }
+.check-row:last-child { border-bottom:none; }
+.check-name { font-size:13px; color:var(--grey-lt); }
+.community { margin-top:14px; }
+.community-title { font-size:12px; font-weight:600; color:var(--grey); text-transform:uppercase; letter-spacing:.5px; margin-bottom:10px; }
+.report-item { padding:10px 0; border-bottom:1px solid var(--border); }
+.report-item:last-child { border-bottom:none; }
+.report-user { font-size:12px; font-weight:600; color:var(--grey-lt); margin-bottom:3px; }
+.report-txt  { font-size:13px; color:var(--white); }
+.report-date { font-size:11px; color:var(--grey); margin-top:3px; }
+
+/* TRENDING */
+.scam-list { display:flex; flex-direction:column; gap:12px; }
+.scam-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:18px 20px; transition:border-color .18s; }
+.scam-card:hover { border-color:#3a4560; }
+.scam-top { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.scam-title { font-size:14px; font-weight:600; color:var(--white); margin-bottom:5px; }
+.scam-desc  { font-size:13px; color:var(--grey-lt); line-height:1.55; margin-bottom:12px; }
+.scam-type-tag { font-size:11px; font-weight:600; padding:3px 10px; border-radius:20px; border:1px solid; }
+.st-phishing { background:var(--red-dim);    color:var(--red);    border-color:#6b1f1f; }
+.st-fraud    { background:var(--yellow-dim); color:var(--yellow); border-color:#5c3e0a; }
+.st-malware  { background:var(--blue-dim);   color:var(--blue-lt);border-color:var(--blue); }
+.st-spam     { background:#1a1f2e;           color:var(--grey-lt);border-color:var(--border); }
+.hot { font-size:10px; font-weight:700; padding:2px 8px; border-radius:20px; background:var(--red-dim); color:var(--red); border:1px solid #6b1f1f; }
+.scam-footer { display:flex; align-items:center; justify-content:space-between; }
+.scam-reports { font-size:12px; color:var(--grey); }
+.scam-url-box { background:var(--surface); border-radius:7px; padding:8px 12px; font-size:12px; color:var(--grey); font-family:monospace; margin-bottom:12px; word-break:break-all; }
+
+/* COMPLAINT */
+.steps-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:24px; }
+.step-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:18px 16px; text-align:center; }
+.step-num { width:32px; height:32px; background:var(--blue); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; margin:0 auto 10px; }
+.step-icon { font-size:22px; margin-bottom:8px; }
+.step-title { font-size:13px; font-weight:600; color:var(--white); margin-bottom:5px; }
+.step-desc  { font-size:12px; color:var(--grey); line-height:1.5; }
+.textarea { width:100%; padding:10px 14px; background:var(--surface); border:1px solid var(--border); border-radius:8px; color:var(--white); font-family:'Inter',sans-serif; font-size:13px; resize:vertical; min-height:90px; outline:none; transition:border-color .18s; }
+.textarea:focus { border-color:var(--blue); }
+.textarea::placeholder { color:var(--grey); }
+.upload-zone { border:2px dashed var(--border); border-radius:9px; padding:28px; text-align:center; cursor:pointer; transition:border-color .18s; }
+.upload-zone:hover { border-color:var(--blue); }
+.upload-zone .ui { font-size:28px; margin-bottom:8px; }
+.upload-zone .ut { font-size:13px; color:var(--grey-lt); }
+.upload-zone .us { font-size:11px; color:var(--grey); margin-top:4px; }
+.portal-link { display:flex; align-items:center; gap:14px; margin-top:20px; padding:16px 18px; background:var(--blue-dim); border:1px solid var(--blue); border-radius:10px; cursor:pointer; transition:background .18s; }
+.portal-link:hover { background:#1a3460; }
+.portal-link .pi { font-size:26px; }
+.portal-link .pt { font-size:14px; font-weight:600; }
+.portal-link .ps { font-size:12px; color:var(--blue-lt); margin-top:2px; }
+.portal-link .arr { margin-left:auto; color:var(--blue-lt); font-size:18px; }
+
+/* SETTINGS */
+.settings-row { display:flex; align-items:center; justify-content:space-between; padding:14px 0; border-bottom:1px solid var(--border); }
+.settings-row:last-child { border-bottom:none; }
+.sr-info .sr-title { font-size:14px; font-weight:500; color:var(--white); }
+.sr-info .sr-desc  { font-size:12px; color:var(--grey); margin-top:2px; }
+.switch { width:40px; height:22px; background:var(--border); border-radius:11px; position:relative; cursor:pointer; transition:background .2s; flex-shrink:0; margin-left:16px; }
+.switch::after { content:''; position:absolute; top:3px; left:3px; width:16px; height:16px; background:var(--grey); border-radius:50%; transition:all .2s; }
+.switch.on { background:rgba(34,197,94,.3); }
+.switch.on::after { left:21px; background:var(--green); }
+.device-row { display:flex; align-items:center; gap:12px; padding:13px 0; border-bottom:1px solid var(--border); }
+.device-row:last-child { border-bottom:none; }
+.device-ico { width:36px; height:36px; background:var(--surface); border:1px solid var(--border); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:16px; }
+.device-name { font-size:13px; font-weight:600; color:var(--white); }
+.device-sub  { font-size:11px; color:var(--grey); margin-top:2px; }
+.this-chip { font-size:10px; font-weight:600; padding:2px 7px; border-radius:20px; background:var(--green-dim); color:var(--green); border:1px solid #1a5c36; margin-left:auto; }
+
+/* THEME PICKER */
+.theme-options { display:flex; gap:12px; margin-top:14px; }
+.theme-opt {
+  flex:1; padding:16px 14px; border-radius:10px; cursor:pointer;
+  border:2px solid var(--border); transition:all .2s;
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+}
+.theme-opt:hover { border-color:var(--blue-lt); }
+.theme-opt.selected { border-color:var(--blue); background:var(--blue-dim); }
+.theme-preview {
+  width:100%; height:44px; border-radius:6px; overflow:hidden;
+  display:flex; gap:4px; padding:6px;
+}
+.tp-dark  { background:#0d1117; }
+.tp-light { background:#f1f5fb; }
+.tp-bar { height:100%; border-radius:3px; }
+.tp-dark  .tp-bar { background:#1c2333; }
+.tp-light .tp-bar { background:#ffffff; border:1px solid #dde3ef; }
+.theme-opt-label { font-size:13px; font-weight:600; }
+.theme-opt-sub   { font-size:11px; color:var(--grey); }
+.selected-check {
+  width:18px; height:18px; background:var(--blue);
+  border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-size:10px; color:#fff; margin-top:2px;
+}
+
+#toast { position:fixed; top:66px; right:20px; z-index:999; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:12px 16px; display:flex; align-items:flex-start; gap:10px; max-width:300px; box-shadow:0 8px 24px rgba(0,0,0,.4); animation:fadeUp .3s ease; }
+#toast .ticon { font-size:18px; flex-shrink:0; }
+#toast .ttxt  { font-size:13px; font-weight:600; color:var(--white); }
+#toast .tsub  { font-size:12px; color:var(--grey); margin-top:2px; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginPage">
+  <div class="login-wrap">
+    <div class="login-logo">
+      <div class="logo-icon">🛡️</div>
+      <div class="logo-name">Cyber<span>Shield</span></div>
+    </div>
+    <div class="login-heading">Welcome back</div>
+    <div class="login-sub">Sign in to your financial protection dashboard</div>
+    <div class="tab-row">
+      <button class="tab active" onclick="switchTab(this,'email')">Email</button>
+      <button class="tab" onclick="switchTab(this,'phone')">Phone</button>
+    </div>
+    <div id="eTab">
+      <div class="field"><label>Email address</label><input type="email" placeholder="you@example.com"></div>
+    </div>
+    <div id="pTab" style="display:none">
+      <div class="field"><label>Phone number</label><input type="tel" placeholder="+91 98765 43210"></div>
+    </div>
+    <div class="field"><label>Password</label><input type="password" placeholder="••••••••"></div>
+    <div class="field">
+      <label>OTP Verification</label>
+      <div class="otp-row">
+        <input type="text" placeholder="6-digit OTP" maxlength="6">
+        <button class="otp-btn">Send OTP</button>
+      </div>
+    </div>
+    <div class="toggle-row"><div class="tog"></div><span>Multi-factor authentication</span></div>
+    <button class="bio-btn" onclick="toast('🔑 Use fingerprint or Face ID on your device')">🔑 Sign in with Biometrics</button>
+    <button class="login-btn" onclick="launchApp()">Sign In →</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" style="display:none">
+  <div class="ticon">ℹ️</div>
+  <div><div class="ttxt" id="ttxt"></div><div class="tsub" id="tsub"></div></div>
+</div>
+
+<!-- MAIN APP -->
+<div id="mainApp">
+  <nav class="topnav">
+    <div class="nav-logo">
+      <div class="nav-logo-icon">🛡️</div>
+      <div class="nav-logo-text">Cyber<span>Shield</span></div>
+    </div>
+    <div class="nav-links">
+      <button class="navbtn active" onclick="show('dashboard',this)">Dashboard</button>
+      <button class="navbtn" onclick="show('alerts',this)">Alerts <span class="alert-dot">4</span></button>
+      <button class="navbtn" onclick="show('transactions',this)">Transactions</button>
+      <button class="navbtn" onclick="show('phone',this)">Verify Number</button>
+      <button class="navbtn" onclick="show('link',this)">Verify Link</button>
+      <button class="navbtn" onclick="show('trending',this)">Trending Scams</button>
+      <button class="navbtn" onclick="show('complaint',this)">Complaint</button>
+      <button class="navbtn" onclick="show('settings',this)">Settings</button>
+    </div>
+    <div class="nav-right">
+      <div class="protected-badge"><div class="dot"></div> Protected</div>
+      <div class="avatar">👤</div>
+    </div>
+  </nav>
+
+  <!-- DASHBOARD -->
+  <div class="page active" id="pg-dashboard">
+    <div class="page-title">Security Overview</div>
+    <div class="page-desc">Last updated 2 minutes ago · All systems operational</div>
+    <div class="grid-4">
+      <div class="stat"><div class="stat-icon">🚨</div><div class="stat-num c-red">4</div><div class="stat-lbl">Active Threats</div><div class="stat-note">↑ 2 new today</div></div>
+      <div class="stat"><div class="stat-icon">⚠️</div><div class="stat-num c-yellow">12</div><div class="stat-lbl">Under Review</div><div class="stat-note">Suspicious transactions</div></div>
+      <div class="stat"><div class="stat-icon">🔒</div><div class="stat-num c-blue">287</div><div class="stat-lbl">Threats Blocked</div><div class="stat-note">This month</div></div>
+      <div class="stat"><div class="stat-icon">✅</div><div class="stat-num c-green">1,429</div><div class="stat-lbl">Safe Transactions</div><div class="stat-note">99.2% safe rate</div></div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Security Risk Level</div>
+        <div class="card-sub">Based on recent account activity</div>
+        <div class="risk-wrap">
+          <div class="ring-wrap">
+            <svg width="120" height="120" viewBox="0 0 120 120">
+              <circle class="ring-bg" cx="60" cy="60" r="50"/>
+              <circle class="ring-val" cx="60" cy="60" r="50" stroke="#f59e0b" stroke-dasharray="314.16" stroke-dashoffset="188" id="riskRing"/>
+            </svg>
+            <div class="ring-label"><div class="ring-num c-yellow">40</div><div class="ring-txt">Risk Score</div></div>
+          </div>
+          <div class="risk-status c-yellow">Moderate Risk</div>
+          <div class="risk-hint">2 suspicious activities need your attention</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Suspicious Activity — Last 7 Days</div>
+        <div class="card-sub">Number of flagged events per day</div>
+        <div class="bars">
+          <div class="bar-col"><div class="bar-fill" style="height:35%"></div><div class="bar-day">Mon</div></div>
+          <div class="bar-col"><div class="bar-fill" style="height:55%"></div><div class="bar-day">Tue</div></div>
+          <div class="bar-col"><div class="bar-fill" style="height:30%"></div><div class="bar-day">Wed</div></div>
+          <div class="bar-col"><div class="bar-fill" style="height:70%"></div><div class="bar-day">Thu</div></div>
+          <div class="bar-col"><div class="bar-fill" style="height:45%"></div><div class="bar-day">Fri</div></div>
+          <div class="bar-col"><div class="bar-fill" style="height:85%;background:var(--red-dim);border-color:var(--red)"></div><div class="bar-day">Sat</div></div>
+          <div class="bar-col"><div class="bar-fill" style="height:60%"></div><div class="bar-day">Sun</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <div><div class="card-title">Recent Transactions</div><div style="font-size:12px;color:var(--grey);margin-top:2px">Quick view of latest activity</div></div>
+        <button class="btn btn-verify" onclick="show('transactions',document.querySelectorAll('.navbtn')[2])">View All</button>
+      </div>
+      <table class="tbl">
+        <thead><tr><th>Merchant</th><th>Amount</th><th>Time</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td><div class="mer">Amazon Pay</div><div class="mer-sub">UPI · #TXN8821</div></td><td class="c-grey">₹2,450</td><td style="color:var(--grey);font-size:12px">10:32 AM</td><td><span class="chip chip-safe">✓ Safe</span></td><td><button class="btn btn-approve">Verified</button></td></tr>
+          <tr><td><div class="mer">Unknown Merchant</div><div class="mer-sub">NEFT · #TXN9934</div></td><td class="c-red" style="font-weight:600">₹15,000</td><td style="color:var(--grey);font-size:12px">9:15 AM</td><td><span class="chip chip-flag">⚠ Flagged</span></td><td><button class="btn btn-block" onclick="toast('🚫 Transaction blocked!','₹15,000 transfer stopped')">Block</button></td></tr>
+          <tr><td><div class="mer">Swiggy</div><div class="mer-sub">Debit Card · #TXN7720</div></td><td class="c-grey">₹380</td><td style="color:var(--grey);font-size:12px">8:05 AM</td><td><span class="chip chip-safe">✓ Safe</span></td><td><button class="btn btn-approve">Verified</button></td></tr>
+          <tr><td><div class="mer">Crypto Exchange XYZ</div><div class="mer-sub">IMPS · #TXN6601</div></td><td class="c-yellow" style="font-weight:600">₹50,000</td><td style="color:var(--grey);font-size:12px">Yesterday</td><td><span class="chip chip-review">⟳ Review</span></td><td><button class="btn btn-report" onclick="toast('📋 Reported for investigation')">Report</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ALERTS -->
+  <div class="page" id="pg-alerts">
+    <div class="page-title">Security Alerts</div>
+    <div class="page-desc">4 active alerts requiring your attention</div>
+    <div class="alert-list">
+      <div class="alert-card high">
+        <div class="alert-ico ico-red">💳</div>
+        <div class="alert-body">
+          <div class="alert-title">Fraudulent Transaction Detected</div>
+          <div class="alert-desc">Unauthorized debit of ₹15,000 attempted from your account to an unverified merchant. Transaction has been temporarily held.</div>
+          <div class="alert-footer"><span class="alert-time">2 min ago</span><span class="risk-tag tag-high">High Risk</span></div>
+          <div class="btn-row">
+            <button class="btn btn-approve" onclick="toast('✅ Transaction approved')">Approve</button>
+            <button class="btn btn-block" onclick="toast('🚫 Transaction blocked!','Transfer stopped successfully')">Block</button>
+            <button class="btn btn-report" onclick="toast('📋 Reported as scam')">Report Scam</button>
+          </div>
+        </div>
+      </div>
+      <div class="alert-card high">
+        <div class="alert-ico ico-red">🎣</div>
+        <div class="alert-body">
+          <div class="alert-title">Phishing Link Detected in SMS</div>
+          <div class="alert-desc">A suspicious link was found in a recent SMS: <span style="color:var(--red);font-family:monospace;font-size:12px">sbi-secure-login.xyz/verify</span> — this domain mimics SBI Bank and may steal your credentials.</div>
+          <div class="alert-footer"><span class="alert-time">15 min ago</span><span class="risk-tag tag-high">Phishing</span></div>
+          <div class="btn-row">
+            <button class="btn btn-block" onclick="toast('🚫 Link blocked!')">Block Link</button>
+            <button class="btn btn-report" onclick="toast('📋 Link reported to database')">Report</button>
+          </div>
+        </div>
+      </div>
+      <div class="alert-card med">
+        <div class="alert-ico ico-yellow">📞</div>
+        <div class="alert-body">
+          <div class="alert-title">Suspicious Phone Number</div>
+          <div class="alert-desc">+91 98113 XXXXX has been flagged by 892 users as a financial fraud caller. Known for impersonating bank KYC agents.</div>
+          <div class="alert-footer"><span class="alert-time">1 hr ago</span><span class="risk-tag tag-med">Suspicious</span></div>
+          <div class="btn-row">
+            <button class="btn btn-block" onclick="toast('🚫 Number blocked!')">Block Number</button>
+            <button class="btn btn-report" onclick="toast('📋 Number reported')">Report</button>
+          </div>
+        </div>
+      </div>
+      <div class="alert-card med">
+        <div class="alert-ico ico-yellow">🔐</div>
+        <div class="alert-body">
+          <div class="alert-title">Unknown Login Attempt</div>
+          <div class="alert-desc">Login attempt from Hyderabad on a new device (Windows 11 / Chrome). IP: 103.XXX.XX.45. This is not your registered device.</div>
+          <div class="alert-footer"><span class="alert-time">3 hrs ago</span><span class="risk-tag tag-med">Suspicious</span></div>
+          <div class="btn-row">
+            <button class="btn btn-approve" onclick="toast('✅ Login marked as safe')">It Was Me</button>
+            <button class="btn btn-block" onclick="toast('🚫 Session terminated!','Device blocked from account')">Block & Logout</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRANSACTIONS -->
+  <div class="page" id="pg-transactions">
+    <div class="page-title">Transaction Verification</div>
+    <div class="page-desc">Review and manage flagged financial transactions</div>
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <div class="card-title" style="margin-bottom:0">All Transactions</div>
+        <button class="btn btn-verify">Export</button>
+      </div>
+      <table class="tbl">
+        <thead><tr><th>Transaction</th><th>Amount</th><th>Date</th><th>Method</th><th>Risk</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr><td><div class="mer">Unknown Merchant</div><div class="mer-sub">#TXN9934</div></td><td class="c-red" style="font-weight:600">₹15,000</td><td style="color:var(--grey);font-size:12px">Today 9:15 AM</td><td style="color:var(--grey);font-size:12px">NEFT</td><td><span class="risk-tag tag-high">High</span></td><td><span class="chip chip-flag">Flagged</span></td><td><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-approve" onclick="toast('✅ Approved')">Approve</button><button class="btn btn-block" onclick="toast('🚫 Blocked!')">Block</button><button class="btn btn-report" onclick="toast('📋 Reported')">Report</button></div></td></tr>
+          <tr><td><div class="mer">Crypto Exchange XYZ</div><div class="mer-sub">#TXN6601</div></td><td class="c-yellow" style="font-weight:600">₹50,000</td><td style="color:var(--grey);font-size:12px">Yesterday</td><td style="color:var(--grey);font-size:12px">IMPS</td><td><span class="risk-tag tag-med">Medium</span></td><td><span class="chip chip-review">Review</span></td><td><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-approve" onclick="toast('✅ Approved')">Approve</button><button class="btn btn-block" onclick="toast('🚫 Blocked!')">Block</button><button class="btn btn-report" onclick="toast('📋 Reported')">Report</button></div></td></tr>
+          <tr><td><div class="mer">Amazon Pay</div><div class="mer-sub">#TXN8821</div></td><td class="c-grey">₹2,450</td><td style="color:var(--grey);font-size:12px">Today 10:32 AM</td><td style="color:var(--grey);font-size:12px">UPI</td><td><span class="risk-tag tag-low">Low</span></td><td><span class="chip chip-safe">Safe</span></td><td><button class="btn btn-approve">Verified</button></td></tr>
+          <tr><td><div class="mer">Swiggy</div><div class="mer-sub">#TXN7720</div></td><td class="c-grey">₹380</td><td style="color:var(--grey);font-size:12px">Today 8:05 AM</td><td style="color:var(--grey);font-size:12px">Card</td><td><span class="risk-tag tag-low">Low</span></td><td><span class="chip chip-safe">Safe</span></td><td><button class="btn btn-approve">Verified</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- VERIFY PHONE -->
+  <div class="page" id="pg-phone">
+    <div class="page-title">Phone Number Checker</div>
+    <div class="page-desc">Find out if a number is spam, fraud, or safe before you engage</div>
+    <div class="search-box">
+      <div class="card-title">Enter Phone Number</div>
+      <div style="font-size:13px;color:var(--grey);margin-top:4px">Our database covers 50M+ reported numbers across India</div>
+      <div class="search-row">
+        <input class="search-input" id="phoneIn" type="tel" placeholder="+91 XXXXX XXXXX">
+        <button class="btn btn-primary" onclick="scanPhone()">Check Number</button>
+      </div>
+    </div>
+    <div id="phoneRes" style="display:none">
+      <div class="result-box">
+        <div class="result-head"><div class="result-ico ico-red">⚠️</div><div><div class="result-label c-red">High Risk — Fraud</div><div class="result-sub" id="phoneResNum">+91 98113 77XXX</div></div></div>
+        <div class="result-stats">
+          <div class="rs"><div class="rs-n c-red">92</div><div class="rs-l">Risk Score</div></div>
+          <div class="rs"><div class="rs-n c-yellow">1,204</div><div class="rs-l">User Reports</div></div>
+          <div class="rs"><div class="rs-n c-grey">Jio</div><div class="rs-l">Operator</div></div>
+        </div>
+        <div class="tag-row"><span class="tag tag-danger">Financial Fraud</span><span class="tag tag-warn">Telemarketing Spam</span><span class="tag tag-danger">KYC Scam</span></div>
+        <div class="community">
+          <div class="community-title">Community Reports</div>
+          <div class="report-item"><div class="report-user">Anonymous · Mumbai</div><div class="report-txt">"Called saying my account would be blocked. Asked for OTP — classic fraud."</div><div class="report-date">2 days ago</div></div>
+          <div class="report-item"><div class="report-user">User · Delhi</div><div class="report-txt">"Pretended to be HDFC customer care. Very convincing — be careful."</div><div class="report-date">5 days ago</div></div>
+        </div>
+        <div class="btn-row" style="margin-top:16px">
+          <button class="btn btn-block" onclick="toast('🚫 Number blocked!')">Block Number</button>
+          <button class="btn btn-report" onclick="toast('📋 Thank you for reporting!')">Report This Number</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VERIFY LINK -->
+  <div class="page" id="pg-link">
+    <div class="page-title">Link / URL Scanner</div>
+    <div class="page-desc">Paste any link to check if it is safe or a threat</div>
+    <div class="search-box">
+      <div class="card-title">Paste URL to Scan</div>
+      <div style="font-size:13px;color:var(--grey);margin-top:4px">Checked against 100+ threat intelligence databases in real time</div>
+      <div class="search-row">
+        <input class="search-input" id="linkIn" type="url" placeholder="https://suspicious-link.com">
+        <button class="btn btn-primary" onclick="scanLink()">Scan Link</button>
+      </div>
+    </div>
+    <div id="linkRes" style="display:none">
+      <div class="result-box">
+        <div class="result-head"><div class="result-ico ico-red">🎣</div><div><div class="result-label c-red">Phishing Site Detected</div><div class="result-sub" id="linkResUrl">http://sbi-secure-login.xyz/verify</div></div></div>
+        <div class="result-stats">
+          <div class="rs"><div class="rs-n c-red">97</div><div class="rs-l">Risk Score</div></div>
+          <div class="rs"><div class="rs-n c-red">3 days</div><div class="rs-l">Domain Age</div></div>
+          <div class="rs"><div class="rs-n c-red">0%</div><div class="rs-l">Safety Rating</div></div>
+        </div>
+        <div class="tag-row"><span class="tag tag-danger">Phishing</span><span class="tag tag-danger">Credential Harvesting</span><span class="tag tag-warn">Brand Impersonation</span></div>
+        <div class="warning-box"><div class="wt">⚠ Do Not Visit This Site</div><p>This domain impersonates SBI Bank. Registered just 3 days ago, it has already collected credentials from 47+ victims. Visiting this link may compromise your banking password and OTPs.</p></div>
+        <div class="check-list">
+          <div class="check-row"><span class="check-name">SSL Certificate Valid</span><span class="risk-tag tag-high">Fail</span></div>
+          <div class="check-row"><span class="check-name">Domain Age &gt; 1 Year</span><span class="risk-tag tag-high">Fail — 3 days</span></div>
+          <div class="check-row"><span class="check-name">Google Safe Browsing</span><span class="risk-tag tag-high">Blocked</span></div>
+          <div class="check-row"><span class="check-name">VirusTotal Score</span><span class="risk-tag tag-high">42 / 70 engines flag</span></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-block" onclick="toast('🚫 Link blocked everywhere!')">Block Link</button>
+          <button class="btn btn-report" onclick="toast('📋 Link reported to databases')">Report Link</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRENDING -->
+  <div class="page" id="pg-trending">
+    <div class="page-title">Trending Scam Alerts</div>
+    <div class="page-desc">Live feed of active fraud campaigns across India</div>
+    <div class="grid-4" style="margin-bottom:24px">
+      <div class="stat"><div class="stat-num c-red">247</div><div class="stat-lbl">Active Campaigns</div><div class="stat-note">↑ 18 new today</div></div>
+      <div class="stat"><div class="stat-num c-yellow">1,829</div><div class="stat-lbl">Phishing Domains</div><div class="stat-note">Blocked this week</div></div>
+      <div class="stat"><div class="stat-num c-blue">2.4M</div><div class="stat-lbl">Users Protected</div><div class="stat-note">Last 30 days</div></div>
+      <div class="stat"><div class="stat-num c-green">98.7%</div><div class="stat-lbl">Detection Rate</div><div class="stat-note">Across all categories</div></div>
+    </div>
+    <div class="scam-list">
+      <div class="scam-card">
+        <div class="scam-top"><span class="scam-type-tag st-phishing">Phishing</span><span class="hot">🔥 Trending</span></div>
+        <div class="scam-title">Fake TRAI Disconnection SMS Campaign</div>
+        <div class="scam-desc">Victims receive an SMS claiming their mobile will be disconnected due to illegal activity. The link leads to a fake TRAI site asking for Aadhaar and bank details.</div>
+        <div class="scam-url-box">trai-verify.in · trai-portal.xyz · trai.disconnect.co</div>
+        <div class="scam-footer"><span class="scam-reports">📊 4,821 reports in last 24h</span><button class="btn btn-report" onclick="toast('📋 Thanks for reporting!')">Report</button></div>
+      </div>
+      <div class="scam-card">
+        <div class="scam-top"><span class="scam-type-tag st-fraud">Financial Fraud</span><span class="hot">🔥 Hot</span></div>
+        <div class="scam-title">Fake KYC Update Call Scam</div>
+        <div class="scam-desc">Callers pretend to be from SBI, HDFC, or Paytm claiming your KYC is pending. They request your Aadhaar, PAN, and eventually OTP — leading to account takeover.</div>
+        <div class="scam-url-box">Common numbers: +91 9811-3XXX-XX · +91 8700-2XXX-XX</div>
+        <div class="scam-footer"><span class="scam-reports">📊 2,104 reports this week</span><button class="btn btn-report" onclick="toast('📋 Thanks for reporting!')">Report</button></div>
+      </div>
+      <div class="scam-card">
+        <div class="scam-top"><span class="scam-type-tag st-malware">Malware</span></div>
+        <div class="scam-title">Fake Banking App via WhatsApp</div>
+        <div class="scam-desc">A malicious APK disguised as "HDFC Mobile Banking v2.1" is being shared in WhatsApp groups. Once installed, it captures credentials and forwards OTPs to attackers.</div>
+        <div class="scam-url-box">File: HDFC_Mobile_v2.1.apk · SHA256: 3a4f7b9c...</div>
+        <div class="scam-footer"><span class="scam-reports">📊 892 devices infected</span><button class="btn btn-report" onclick="toast('📋 Thanks for reporting!')">Report</button></div>
+      </div>
+      <div class="scam-card">
+        <div class="scam-top"><span class="scam-type-tag st-spam">Spam</span></div>
+        <div class="scam-title">Lottery &amp; Prize Money Scam</div>
+        <div class="scam-desc">Bulk SMS messages claiming recipients won ₹25 lakh in a government scheme. Victims are asked to pay a ₹500 "processing fee" to claim their prize — classic advance fee fraud.</div>
+        <div class="scam-footer"><span class="scam-reports">📊 9,310 reports this month</span><button class="btn btn-report" onclick="toast('📋 Thanks for reporting!')">Report</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPLAINT -->
+  <div class="page" id="pg-complaint">
+    <div class="page-title">Cybercrime Complaint Center</div>
+    <div class="page-desc">Report fraud, get help, and take action immediately</div>
+    <div class="card" style="margin-bottom:20px">
+      <div class="card-title">If You Have Been Scammed — Act Immediately</div>
+      <div class="card-sub">Follow these steps to minimise damage</div>
+      <div class="steps-grid">
+        <div class="step-card"><div class="step-num">1</div><div class="step-icon">❄️</div><div class="step-title">Freeze Account</div><div class="step-desc">Freeze your bank account via the app or call your bank's helpline right away.</div></div>
+        <div class="step-card"><div class="step-num">2</div><div class="step-icon">🏦</div><div class="step-title">Contact Your Bank</div><div class="step-desc">Call the 24/7 fraud helpline. Report the unauthorized transaction immediately.</div></div>
+        <div class="step-card"><div class="step-num">3</div><div class="step-icon">🚨</div><div class="step-title">Report Cybercrime</div><div class="step-desc">File at cybercrime.gov.in or call the National Helpline: 1930.</div></div>
+        <div class="step-card"><div class="step-num">4</div><div class="step-icon">📁</div><div class="step-title">Save Evidence</div><div class="step-desc">Screenshot all messages, calls, transaction IDs, and scammer communication.</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">File a Complaint</div>
+      <div class="card-sub">Provide details about the fraud incident</div>
+      <div class="grid-2" style="gap:14px;margin-bottom:0">
+        <div class="field"><label>Your Full Name</label><input type="text" placeholder="Rajan Sharma"></div>
+        <div class="field"><label>Your Phone Number</label><input type="tel" placeholder="+91 98765 43210"></div>
+      </div>
+      <div class="field"><label>Fraud Phone Number (if any)</label><input type="tel" placeholder="+91 XXXXX XXXXX"></div>
+      <div class="field"><label>Suspicious Link / URL (if any)</label><input type="url" placeholder="https://suspicious-site.com"></div>
+      <div class="grid-2" style="gap:14px;margin-bottom:0">
+        <div class="field"><label>Amount Lost (₹)</label><input type="number" placeholder="e.g. 15000"></div>
+        <div class="field"><label>Date of Incident</label><input type="date"></div>
+      </div>
+      <div class="field"><label>Describe What Happened</label><textarea class="textarea" placeholder="Describe how the scam occurred, what information you shared, and any other details..."></textarea></div>
+      <div class="field">
+        <label>Upload Evidence</label>
+        <div class="upload-zone" onclick="toast('📎 File upload dialog would open here')"><div class="ui">📎</div><div class="ut">Click to upload or drag and drop</div><div class="us">PNG, JPG, PDF — max 10MB each</div></div>
+      </div>
+      <button class="btn btn-primary" onclick="toast('✅ Complaint submitted!','Reference: #CYB2026031847')" style="width:100%;padding:12px;font-size:14px">Submit Complaint</button>
+      <div class="portal-link" onclick="toast('🌐 Opening cybercrime.gov.in...')">
+        <div class="pi">🏛️</div>
+        <div><div class="pt">National Cyber Crime Reporting Portal</div><div class="ps">cybercrime.gov.in · Helpline: 1930</div></div>
+        <div class="arr">→</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="page" id="pg-settings">
+    <div class="page-title">Security Settings</div>
+    <div class="page-desc">Manage your protection preferences and account security</div>
+
+    <!-- THEME PICKER -->
+    <div class="card" style="margin-bottom:20px">
+      <div class="card-title">Appearance</div>
+      <div class="card-sub">Choose how CyberShield looks for you</div>
+      <div class="theme-options">
+        <div class="theme-opt selected" id="theme-dark" onclick="setTheme('dark')">
+          <div class="theme-preview tp-dark"><div class="tp-bar" style="width:30%"></div><div class="tp-bar" style="width:50%"></div><div class="tp-bar" style="width:20%"></div></div>
+          <div class="theme-opt-label">Dark</div>
+          <div class="theme-opt-sub">Easy on the eyes</div>
+          <div class="selected-check" id="check-dark">✓</div>
+        </div>
+        <div class="theme-opt" id="theme-light" onclick="setTheme('light')">
+          <div class="theme-preview tp-light"><div class="tp-bar" style="width:30%"></div><div class="tp-bar" style="width:50%"></div><div class="tp-bar" style="width:20%"></div></div>
+          <div class="theme-opt-label">Light</div>
+          <div class="theme-opt-sub">Clean and bright</div>
+          <div class="selected-check" id="check-light" style="display:none">✓</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-title">Alert Preferences</div>
+          <div class="card-sub">Choose what triggers notifications</div>
+          <div class="settings-row"><div class="sr-info"><div class="sr-title">Transaction Alerts</div><div class="sr-desc">Notify for every transaction above ₹500</div></div><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="settings-row"><div class="sr-info"><div class="sr-title">Login Alerts</div><div class="sr-desc">Alert on every new device login</div></div><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="settings-row"><div class="sr-info"><div class="sr-title">Phishing Detection</div><div class="sr-desc">Scan incoming links automatically</div></div><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="settings-row"><div class="sr-info"><div class="sr-title">Spam Call Warnings</div><div class="sr-desc">Warn before answering fraud numbers</div></div><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="settings-row"><div class="sr-info"><div class="sr-title">Weekly Security Report</div><div class="sr-desc">Summary email every Sunday</div></div><div class="switch" onclick="this.classList.toggle('on')"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Spending Limits</div>
+          <div class="card-sub">Set transaction thresholds</div>
+          <div class="field"><label>Auto-Approve Below (₹)</label><input type="number" value="1000"></div>
+          <div class="field"><label>Require OTP Above (₹)</label><input type="number" value="5000"></div>
+          <div class="field" style="margin-bottom:0"><label>Daily Limit (₹)</label><input type="number" value="50000"></div>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-title">Authentication</div>
+          <div class="card-sub">Manage your login security</div>
+          <div class="settings-row"><div class="sr-info"><div class="sr-title">Two-Factor Authentication</div><div class="sr-desc">SMS OTP on every login</div></div><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="settings-row"><div class="sr-info"><div class="sr-title">Biometric Login</div><div class="sr-desc">Fingerprint or Face ID</div></div><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="settings-row"><div class="sr-info"><div class="sr-title">Trusted Devices Only</div><div class="sr-desc">Block logins from unknown devices</div></div><div class="switch" onclick="this.classList.toggle('on')"></div></div>
+          <div class="settings-row"><div class="sr-info"><div class="sr-title">Auto Logout (15 min)</div><div class="sr-desc">Session expires after inactivity</div></div><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Device Management</div>
+          <div class="card-sub">Trusted devices on your account</div>
+          <div class="device-row"><div class="device-ico">📱</div><div><div class="device-name">Samsung Galaxy S24</div><div class="device-sub">Android 14 · Mumbai · Active now</div></div><span class="this-chip">This Device</span></div>
+          <div class="device-row"><div class="device-ico">💻</div><div><div class="device-name">MacBook Pro</div><div class="device-sub">macOS 14 · Safari · 2 days ago</div></div><button class="btn btn-block" style="margin-left:auto" onclick="toast('🚫 Device removed!')">Remove</button></div>
+          <div class="device-row"><div class="device-ico">🖥️</div><div><div class="device-name">Unknown Windows PC</div><div class="device-sub" style="color:var(--red)">Hyderabad · Suspicious · Chrome</div></div><button class="btn btn-block" style="margin-left:auto" onclick="toast('🚫 Device blocked!','Removed from your account')">Block</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function switchTab(btn, type) {
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('eTab').style.display = type==='email'?'block':'none';
+  document.getElementById('pTab').style.display = type==='phone'?'block':'none';
+}
+
+function launchApp() {
+  const lp = document.getElementById('loginPage');
+  lp.style.transition = 'opacity .4s';
+  lp.style.opacity = '0';
+  setTimeout(() => {
+    lp.style.display = 'none';
+    const app = document.getElementById('mainApp');
+    app.style.display = 'block';
+    app.style.opacity = '0';
+    app.style.transition = 'opacity .4s';
+    requestAnimationFrame(() => { app.style.opacity = '1'; });
+    setTimeout(() => toast('🚨 Fraudulent transaction blocked', '₹15,000 transfer to Unknown Merchant stopped'), 1800);
+  }, 400);
+}
+
+function show(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const pg = document.getElementById('pg-'+id);
+  if (pg) pg.classList.add('active');
+  document.querySelectorAll('.navbtn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
+
+let toastTmr;
+function toast(text, sub) {
+  document.getElementById('ttxt').textContent = text;
+  document.getElementById('tsub').textContent = sub||'';
+  const t = document.getElementById('toast');
+  t.style.display = 'flex';
+  clearTimeout(toastTmr);
+  toastTmr = setTimeout(() => {
+    t.style.transition = 'opacity .3s';
+    t.style.opacity = '0';
+    setTimeout(() => { t.style.display='none'; t.style.opacity='1'; t.style.transition=''; }, 300);
+  }, 3200);
+}
+
+function setTheme(t) {
+  if (t === 'light') {
+    document.body.classList.add('light');
+    document.getElementById('theme-dark').classList.remove('selected');
+    document.getElementById('theme-light').classList.add('selected');
+    document.getElementById('check-dark').style.display = 'none';
+    document.getElementById('check-light').style.display = 'flex';
+  } else {
+    document.body.classList.remove('light');
+    document.getElementById('theme-light').classList.remove('selected');
+    document.getElementById('theme-dark').classList.add('selected');
+    document.getElementById('check-light').style.display = 'none';
+    document.getElementById('check-dark').style.display = 'flex';
+  }
+  toast(t === 'light' ? '☀️ Light theme applied' : '🌙 Dark theme applied');
+}
+
+function scanPhone() {
+  const v = document.getElementById('phoneIn').value || '+91 98113 77XXX';
+  document.getElementById('phoneResNum').textContent = v;
+  document.getElementById('phoneRes').style.display = 'block';
+  toast('🔍 Scan complete — High Risk number detected!');
+}
+
+function scanLink() {
+  const v = document.getElementById('linkIn').value || 'http://sbi-secure-login.xyz/verify';
+  document.getElementById('linkResUrl').textContent = v;
+  document.getElementById('linkRes').style.display = 'block';
+  toast('🎣 Phishing site detected!', 'This link has been blocked');
+}
+</script>
+</body>
+</html>
